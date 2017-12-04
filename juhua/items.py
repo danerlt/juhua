@@ -8,11 +8,15 @@
 import scrapy
 import re
 from scrapy.loader import ItemLoader
-from scrapy.loader.processors import MapCompose, TakeFirst
+from scrapy.loader.processors import MapCompose, TakeFirst, Join
 
 
 def return_value(value):
     return value
+
+
+def parse_name(value):
+    return value.strip()
 
 
 def parse_num(value):
@@ -34,7 +38,17 @@ def parse_sales_num(value):
 
 def parse_link(value):
     if r'https' not in value:
-        return r'http' + value
+        return r'http:' + value
+
+
+def parse_resource(value):
+    if u'taobao' in value:
+        value = '淘宝'
+    elif u'tmall' in value:
+        value = '天猫'
+    elif u'jd' in value:
+        value = '京东'
+    return value
 
 
 class ProductItemLoader(ItemLoader):
@@ -44,7 +58,8 @@ class ProductItemLoader(ItemLoader):
 
 class ProductItem(scrapy.Item):
     name = scrapy.Field(
-        input_processor=MapCompose(return_value)
+        input_processor=MapCompose(parse_name),
+        output_processor=Join("")
     )
     link = scrapy.Field(
         input_processor=MapCompose(parse_link)
@@ -57,6 +72,9 @@ class ProductItem(scrapy.Item):
     )
     price = scrapy.Field(
         input_processor=MapCompose(parse_num)
+    )
+    resource = scrapy.Field(
+        input_processor=MapCompose(parse_resource)
     )
 
 

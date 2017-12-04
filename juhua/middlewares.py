@@ -6,6 +6,8 @@
 # http://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+from scrapy.http import HtmlResponse
+
 import random
 
 class JuhuaSpiderMiddleware(object):
@@ -54,6 +56,16 @@ class JuhuaSpiderMiddleware(object):
 
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
+
+class JsPageMiddleware(object):
+    # 通过chrome解析动态网页
+    def process_request(self, request, spider):
+        if spider.name == 'taobao':
+            spider.brower.get(request.url)
+            import time
+            time.sleep(1)
+            body = spider.brower.page_source
+            return HtmlResponse(url=spider.brower.current_url, body=body, request=request, encoding='utf-8')
 
 
 # 主要用来动态获取user agent, user agent列表USER_AGENTS在setting.py中进行配置

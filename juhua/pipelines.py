@@ -58,7 +58,7 @@ class MySQLPipeline(object):
 
 class ProductPipeline(MySQLPipeline):
     def process_item(self, item, spider):
-        attr_names = ['name', 'link', 'shop_name', 'sales_num', 'price']
+        attr_names = ['name', 'link', 'shop_name', 'sales_num', 'price', 'resource']
         for attr in attr_names:
             if attr not in item:
                 raise DropItem("%s没有%s属性" % (item, attr))
@@ -71,6 +71,6 @@ class ProductPipeline(MySQLPipeline):
         tx.execute(select_sql % (item["name"],))
         result = tx.fetchone()
         if result is None:
-            sql = u'INSERT INTO product(`name`,`link`,`shop_name`,`sales_num`,`price`) VALUES ("%s", "%s", "%s", "%d", "%f")'
-            tx.execute(sql % (item["name"], item["link"], item["shop_name"], item["sales_num"], item["price"]))
+            sql = u'INSERT INTO product(`name`,`link`,`shop_name`,`sales_num`,`price`,`resource`) VALUES ("%s", "%s", "%s", "%d", "%f", "%s")'
+            tx.execute(sql % (item["name"], item["link"], item["shop_name"], item["sales_num"], item["price"], item["resource"]))
 

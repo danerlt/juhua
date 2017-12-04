@@ -6,14 +6,15 @@ USE `juhua`;
 
 DROP TABLE IF EXISTS `product`;
 CREATE TABLE `product` (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id，主键，自增',
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id，主键，自增',
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '产品名',
   `link` text COLLATE utf8_unicode_ci COMMENT '产品链接',
   `shop_name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '店铺名',
-  `sales_num` int(10) unsigned DEFAULT NULL COMMENT '销售数量',
+  `sales_num` int unsigned DEFAULT NULL COMMENT '销售数量',
   `price` FLOAT DEFAULT '0.00' COMMENT '价格',
+  `resource` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '来源,京东,淘宝,天猫',
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`name`)
+  UNIQUE KEY (`name`,`resource`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
@@ -30,8 +31,7 @@ CREATE TABLE `product_info` (
   `quality_guarantee_period` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '保质期',
   `monthly_sales` int   DEFAULT 0 COMMENT '月销量,默认为0,只有天猫上的数据可以查看到',
   `pack_type` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '包装种类',
-  `authentication` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '认证标准',
-  `resource` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '来源,京东,淘宝,天猫',
+  `resource` varchar(8) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '来源,京东,淘宝,天猫',
   PRIMARY KEY (`id`),
-  UNIQUE KEY (`name`)
+  UNIQUE KEY (`name`,`resource`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
