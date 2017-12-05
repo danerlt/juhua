@@ -19,7 +19,7 @@ def parse_name(value):
     return value.strip()
 
 
-def parse_num(value):
+def parse_price(value):
     return float(value)
 
 
@@ -51,7 +51,7 @@ def parse_resource(value):
     return value
 
 
-class ProductItemLoader(ItemLoader):
+class MyItemLoader(ItemLoader):
     # 自定义ItemLoader
     default_output_processor = TakeFirst()
 
@@ -71,7 +71,7 @@ class ProductItem(scrapy.Item):
         input_processor=MapCompose(parse_sales_num)
     )
     price = scrapy.Field(
-        input_processor=MapCompose(parse_num)
+        input_processor=MapCompose(parse_price)
     )
     resource = scrapy.Field(
         input_processor=MapCompose(parse_resource)
@@ -79,15 +79,36 @@ class ProductItem(scrapy.Item):
 
 
 class ProductInfoItem(scrapy.Item):
-    name = scrapy.Item()
-    origin_price = scrapy.Item()
-    real_price = scrapy.Item()
-    brand = scrapy.Item()
-    address = scrapy.Item()
-    category = scrapy.Item()
-    weight = scrapy.Item()
-    quality_guarantee_period = scrapy.Item()
-    monthly_sales = scrapy.Item()
-    pack_type = scrapy.Item()
-    authentication = scrapy.Item()
-    resource = scrapy.Item()
+    name = scrapy.Field(
+        input_processor=MapCompose(parse_name)
+    )
+    origin_price = scrapy.Field(
+        input_processor=MapCompose(parse_price)
+    )
+    real_price = scrapy.Field(
+        input_processor=MapCompose(parse_price)
+    )
+    brand = scrapy.Field(
+        input_processor=MapCompose(return_value)
+    )
+    address = scrapy.Field(
+        input_processor=MapCompose(return_value)
+    )
+    category = scrapy.Field(
+        input_processor=MapCompose(return_value)
+    )
+    weight = scrapy.Field(
+        input_processor=MapCompose(return_value)
+    )
+    quality_guarantee_period = scrapy.Field(
+        input_processor=MapCompose(return_value)
+    )
+    monthly_sales = scrapy.Field(
+        input_processor=MapCompose(int)
+    )
+    pack_type = scrapy.Field(
+        input_processor=MapCompose(return_value)
+    )
+    resource = scrapy.Field(
+        input_processor=MapCompose(parse_resource)
+    )

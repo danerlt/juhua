@@ -10,6 +10,7 @@ from scrapy.http import HtmlResponse
 
 import random
 
+
 class JuhuaSpiderMiddleware(object):
     # Not all methods need to be defined. If a method is not defined,
     # scrapy acts as if the spider middleware does not modify the
@@ -57,13 +58,12 @@ class JuhuaSpiderMiddleware(object):
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
 
+
 class JsPageMiddleware(object):
     # 通过chrome解析动态网页
     def process_request(self, request, spider):
         if spider.name == 'taobao':
             spider.brower.get(request.url)
-            import time
-            time.sleep(1)
             body = spider.brower.page_source
             return HtmlResponse(url=spider.brower.current_url, body=body, request=request, encoding='utf-8')
 
@@ -80,5 +80,5 @@ class RandomUserAgent(object):
         return cls(crawler.settings.getlist('USER_AGENTS'))
 
     def process_request(self, request, spider):
-        #print "**************************" + random.choice(self.agents)
+        # print "**************************" + random.choice(self.agents)
         request.headers.setdefault('User-Agent', random.choice(self.agents))

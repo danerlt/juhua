@@ -71,6 +71,36 @@ class ProductPipeline(MySQLPipeline):
         tx.execute(select_sql % (item["name"],))
         result = tx.fetchone()
         if result is None:
-            sql = u'INSERT INTO product(`name`,`link`,`shop_name`,`sales_num`,`price`,`resource`) VALUES ("%s", "%s", "%s", "%d", "%f", "%s")'
-            tx.execute(sql % (item["name"], item["link"], item["shop_name"], item["sales_num"], item["price"], item["resource"]))
+            sql = u'INSERT INTO product(`name`,`link`,`shop_name`,`sales_num`,`price`,`resource`)' \
+                  u'VALUES ("%s", "%s", "%s", "%d", "%f", "%s")'
+            tx.execute(sql % (item["name"], item["link"], item["shop_name"], item["sales_num"],
+                              item["price"], item["resource"]
+                              )
+                       )
 
+
+class ProductInfoPipeline(MySQLPipeline):
+    def process_item(self, item, spider):
+        attr_names = ['name', 'origin_price', 'real_price', 'brand', 'address', 'category',
+                      'weight', 'quality_guarantee_period', 'pack_type', 'monthly_sales', 'resource']
+        for attr in attr_names:
+            if attr not in item:
+                raise DropItem("%s没有%s属性" % (item, attr))
+        query = self.dbpool.runInteraction(self._insert_record, item)
+        query.addErrback(self._handle_error)
+        return item
+
+    def _insert_record(self, tx, item):
+        select_sql = u"SELECT id from product_info where name like '%s'"
+        tx.execute(select_sql % (item["name"],))
+        result = tx.fetchone()
+        if result is None:
+            sql = u'INSERT INTO product_info(`name`,`origin_price`,`real_price`,`brand`,`address`,`category`,' \
+                  u'`weight`,`quality_guarantee_period`,`pack_type`,`monthly_sales`,`resource`) ' \
+                  u'VALUES ("%s", "%f", "%f", "%s", "%s", "%s", "%s", "%s", "%s", "%d", "%s")'
+            tx.execute(sql % (item["name"], item["origin_price"], item["real_price"], item["brand"], item["address"],
+                              item["category"], item["weight"], item["quality_guarantee_period"], item["pack_type"],
+                              item["monthly_sales"], item["resource"]
+                              )
+                       )
+            pass

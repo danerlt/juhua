@@ -3,7 +3,7 @@ import scrapy
 from scrapy import Request
 from selenium import webdriver
 from scrapy.loader import ItemLoader
-from juhua.items import ProductItem, ProductItemLoader
+from juhua.items import ProductItem, MyItemLoader
 
 
 class JingdongSpider(scrapy.Spider):
@@ -23,7 +23,7 @@ class JingdongSpider(scrapy.Spider):
         # 通过ItemLoader加载Item
         products = response.xpath("//li[@class='gl-item']")
         for product in products:
-            item_loader = ProductItemLoader(item=ProductItem(), selector=product, response=response)
+            item_loader = MyItemLoader(item=ProductItem(), selector=product, response=response)
             item_loader.add_css("name", ".p-name > a::attr(title)")
             item_loader.add_css("link", ".p-name > a::attr(href)")
             item_loader.add_css("shop_name", ".p-shop > span > a::attr(title)")
