@@ -5,11 +5,13 @@ Scrapy爬取京东，淘宝商品数据
 - 1.安装Python3
 具体过程请参考[Python官网](https://python.org)
 - 2.安装依赖
+
 进入项目目录，执行：
 ```
 pip install -r requirements.txt
 ```
 - 3.配置chromeDriver
+
 将项目目录下的geckodriver目录加入到PATH中
 - 4.修改数据库配置
 在settings.py中
