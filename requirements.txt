@@ -16,7 +16,7 @@ constantly==15.1.0
 cryptography==2.1.4
 cssselect==1.0.3
 decorator==4.2.1
-Django==2.0.1
+Django==2.2.24
 dominate==2.3.1
 entrypoints==0.2.3
 Flask==0.12.2
